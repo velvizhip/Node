@@ -1,0 +1,52 @@
+var express = require('express');
+var router = express.Router();
+var customer = require('../models/customers');
+
+/* GET customers listing. */
+router.get('/:id?', function(req, res, next) {
+	if(req.params.id){
+		customer.getCustomerById(req.params.id, function(err, rows){
+			if(err){
+				res.json(err);
+			} else {
+				res.json(rows);
+			}
+		});
+	} else {
+		customer.getCustomers(function(err, rows){
+			if(err){
+				res.json(err);
+			} else {
+				res.json(rows);
+			}
+		});
+	}
+});
+router.post('/', function(req, res, next){
+	customer.addCustomer(req.body, function(err, rows){
+		if(err) {
+			res.json(err);
+		} else {
+			res.json(req.body);
+		}
+	});
+});
+router.put('/:id?', function(req, res, next){
+	customer.updateCustomer(req.body, function(err, rows){
+		if(err) {
+			res.json(err);
+		} else {
+			res.json(req.body);
+		}
+	});
+});
+router.delete('/:id?', function(req, res, next){
+	customer.deleteCustomer(req.params.id, function(err, rows){
+		if(err){
+			res.json(err);
+		} else {
+			res.json(1);
+		}
+	});
+});
+module.exports = router;
